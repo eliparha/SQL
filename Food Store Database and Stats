@@ -1,0 +1,34 @@
+--Create a store database with the food being sold, it's price, how much is in stock, how much has been sold, and how much has been made in profit--
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, food TEXT, price INTEGER, quanity_in_stock INTEGER, quantity_sold INTEGER, profit INTEGER);
+INSERT INTO store VALUES
+(1, "tomato", 1, 20, 7, 14),
+(2, "bread", 2.50, 10, 6, 15),
+(3, "steak", 8.25, 4, 2, 18),
+(4, "apple", 0.75, 25, 10, 10),
+(5, "lettuce", 1.25, 6, 4, 7),
+(6, "eggs", 6, 7, 5, 45),
+(7, "cheese", 3.50, 5, 3, 14),
+(8, "bell pepper", 1.50, 9, 7, 10.50),
+(9, "carrots", 2, 13, 5, 13),
+(10, "orange", 0.75, 25, 9, 14),
+(11, "pear", 1.25, 15, 8, 17),
+(12, "chicken breast", 5.50, 8, 4, 26),
+(13, "bagels", 3.25, 4, 3, 9),
+(14, "milk", 4.50, 10, 5, 30),
+(15, "oat milk", 6, 6, 4, 28);
+
+
+--Display the data ordered by price--
+
+SELECT * FROM store ORDER BY price DESC;
+
+
+--What is the overall profit so far?--
+
+SELECT SUM(profit) FROM store;
+
+
+--What is the most popular item?--
+
+SELECT MAX(quantity_sold) FROM store;
