@@ -1,5 +1,6 @@
---Create a store database with the food being sold, it's price, how much is in stock, how much has been sold, and how much has been made in profit--
-
+/*
+Create a store database with the food being sold, it's price, how much is in stock, how much has been sold, and how much has been made in profit
+*/
 CREATE TABLE store (id INTEGER PRIMARY KEY, food TEXT, price INTEGER, quanity_in_stock INTEGER, quantity_sold INTEGER, profit INTEGER);
 INSERT INTO store VALUES
 (1, "tomato", 1, 20, 7, 14),
@@ -19,16 +20,20 @@ INSERT INTO store VALUES
 (15, "oat milk", 6, 6, 4, 28);
 
 
---Display the data ordered by price--
-
+/*
+Display the data ordered by price
+*/
 SELECT * FROM store ORDER BY price DESC;
 
 
---What is the overall profit so far?--
-
+/*
+What is the overall profit so far?
+*/
 SELECT SUM(profit) FROM store;
 
 
---What is the most popular item?--
+/*
+What is the most popular item?
+*/
 
 SELECT MAX(quantity_sold) FROM store;
