@@ -35,5 +35,4 @@ SELECT SUM(profit) FROM store;
 /*
 What is the most popular item?
 */
-
 SELECT MAX(quantity_sold) FROM store;
