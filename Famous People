@@ -1,0 +1,76 @@
+/*
+Create a table of famous people.
+*/
+CREATE TABLE famous_people (id integer primary key, name TEXT);
+INSERT INTO famous_people VALUES 
+(1, "Lady Gaga"),
+(2, "John Mulaney"),
+(3, "George Washington"),
+(4, "Joe Biden"),
+(5, "Sia"),
+(6, "Ali Wong"),
+(7, "Trevor Noah"),
+(8, "Ed Sheeran"),
+(9, "Elvis Presley"),
+(10, "Ariana Grande");
+
+/*
+Create a table of professions and connect them with the corresponding ID from the famous_people table.
+*/
+CREATE TABLE fame_type (id integer primary key, person_id INTEGER, type TEXT);
+INSERT INTO fame_type VALUES
+(1, 1, "singer"),
+(2, 1, "songwriter"),
+(3, 1, "model"),
+(4, 2, "comedian"),
+(5, 2, "screenwriter"),
+(6, 3, "president"),
+(7, 3, "soldier"),
+(8, 3, "farmer"),
+(9, 4, "president"),
+(10, 4, "author"),
+(11, 5, "singer"),
+(12, 5, "songwriter"),
+(13, 5, "film score composer"),
+(14, 6, "comedian"),
+(15, 6, "actor"),
+(16, 6, "screenwriter"),
+(17, 7, "comedian"),
+(18, 7, "talk show host"),
+(19, 7, "actor"),
+(20, 8, "singer"),
+(21, 8, "songwriter"),
+(22, 8, "actor"),
+(23, 9, "singer"),
+(24, 9, "actor"),
+(25, 9, "soldier"),
+(26, 10, "singer"),
+(27, 10, "actor");
+
+/*
+Create a table of additional information about the famous people listed in famous_people.
+*/
+CREATE TABLE additional_info (id integer primary key, gender TEXT, birthday INTEGER);
+INSERT INTO additional_info VALUES
+(1, "F", 1986),
+(2, "M", 1982),
+(3, "M", 1732),
+(4, "M", 1942),
+(5, "F", 1975),
+(6, "F", 1982),
+(7, "M", 1984),
+(8, "M", 1991),
+(9, "M", 1935),
+(10, "F",1993);
+
+/*
+How long has it been since the famous people listed in famous_people were born?
+*/
+SELECT ROUND(2023 - additional_info.birthday) AS "age if alive", famous_people.name FROM famous_people 
+JOIN additional_info ON famous_people.id = additional_info.id; 
+
+/*
+Who in the list of famous people are actors?
+*/
+SELECT famous_people.name, fame_type.type FROM famous_people 
+JOIN fame_type ON famous_people.id = fame_type.person_id WHERE fame_type.type = "actor";
