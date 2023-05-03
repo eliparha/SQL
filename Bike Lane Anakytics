@@ -1,0 +1,20 @@
+/*The database queried here contained information about a city's bike lanes*/
+
+/*List of all the bike lanes that have an average safety rating of 4.0 or higher. 
+Show average safety rating for each of those bike lanes, and a label that says "Safe Lane".*/
+WITH CTE_Safety AS 
+(SELECT CityBikeLanes.street, AVG(CityBikeLanes.safetyrating) AS avg_safety 
+FROM CityBikeLanes
+GROUP BY street)
+SELECT * , 'Safe Lane' AS Label FROM CTE_Safety
+WHERE avg_safety >= 4;
+
+/*List all of the bike lanes, both safety ratings for each lane, the average safety rating for each lane, and a label with the recommendation as:
+"Leave As-Is" for average ratings of 4 or more, "Remove" for ratings of 2.5 or less, and "Improvement Needed" for all other ratings.*/
+SELECT street , safetyrating , AVG(safetyrating) OVER (partition by street) AS "avg_rating" ,
+CASE WHEN AVG(safetyrating) OVER (partition by street) >= 4 THEN "Leave As-Is"
+WHEN AVG(safetyrating) OVER (partition by street) <= 2.5 THEN "Remove"
+ELSE "Improvement Needed"
+END AS "Reccomendation"
+FROM CityBikeLanes
+ORDER BY avg_rating desc;
