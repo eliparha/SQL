@@ -4,3 +4,13 @@
 SELECT id, artist_name , track_name , tempo, ABS(tempo - (SELECT AVG(tempo) FROM Spotifydata)) AS deviation 
 FROM Spotifydata
 ORDER BY deviation ASC;
+
+/*Calculate the average popularity for the artists in the Spotify data table. 
+Then, for every artist with an average popularity of 90 or above, show their name, their average popularity, and label them as a “Top Star”.*/
+WITH CTE_Popularity AS 
+(SELECT Spotifydata.artist_name , AVG(Spotifydata.popularity) AS avg_pop
+FROM Spotifydata
+GROUP BY artist_name)
+SELECT artist_name , avg_pop , 'TOP STAR' AS tag FROM CTE_Popularity
+WHERE avg_pop >= 90
+ORDER BY avg_pop desc;
