@@ -1,0 +1,6 @@
+/*These queries were using data from Spotify's Top50 playlist.*/
+
+/*Show the artists and their tracks in relation to the deviation of the average tempo in the top 50 tracks.*/
+SELECT id, artist_name , track_name , tempo, ABS(tempo - (SELECT AVG(tempo) FROM Spotifydata)) AS deviation 
+FROM Spotifydata
+ORDER BY deviation ASC;
