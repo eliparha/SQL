@@ -1,0 +1,74 @@
+/*These queries use a database containing a business' album sales*/
+/*Show Customers (their full names, customer ID, and country) who are not in the US. (Hint: != or <> can be used to say "is not equal to").*/
+SELECT CustomerId , FirstName , LastName , Country FROM chinook.customers
+WHERE Country != 'USA';
+
+/*Find the Invoices of customers who are from Brazil. The resulting table should show 
+the customer's full name, Invoice ID, Date of the invoice, and billing country.*/
+SELECT cust.FirstName , cust.LastName , inv.InvoiceId , inv.InvoiceDate , inv.BillingCountry FROM chinook.invoices inv , chinook.customers cust
+WHERE inv.CustomerId = cust.CustomerId
+AND inv.BillingCountry = 'Brazil';
+
+/*Find a unique/distinct list of billing countries from the Invoice table.*/
+SELECT distinct inv.BillingCountry FROM chinook.invoices inv;
+
+/*Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.*/
+SELECT emp.FirstName , emp.LastName , inv.invoiceId FROM chinook.employees emp
+LEFT JOIN chinook.customers ON EmployeeId = SupportRepId
+LEFT JOIN chinook.invoices inv ON chinook.customers.CustomerId = inv.CustomerId;
+
+/*Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.*/
+SELECT inv.InvoiceId , inv.Total , cust.FirstName , cust.LastName , cust.Country , emp.FirstName , emp.LastName FROM chinook.employees emp
+LEFT JOIN chinook.customers cust ON EmployeeId = SupportRepId
+LEFT JOIN chinook.invoices inv ON cust.CustomerId = inv.CustomerId;
+
+/*How many Invoices were there in 2009?*/
+SELECT COUNT(*) FROM chinook.invoices inv
+WHERE inv.InvoiceDate like '2009%';
+
+/*Write a query that includes the purchased track name and album with each invoice line ID and the name of the purchasing customer.*/
+SELECT tr.Name , init.InvoiceId , cust.FirstName , cust.LastName FROM chinook.customers cust
+LEFT JOIN chinook.invoices inv ON cust.CustomerId = inv.CustomerId
+LEFT JOIN chinook.invoice_items init ON inv.InvoiceId = init.InvoiceId
+LEFT JOIN chinook.tracks tr ON init.TrackId = tr.TrackId;
+
+/*Write a query that includes the purchased track name AND artist name with each invoice line ID.*/
+SELECT tr.Name , art.Name FROM chinook.artists art 
+LEFT JOIN chinook.albums alb ON art.ArtistId = alb.ArtistId
+LEFT JOIN chinook.tracks tr ON alb.AlbumId = tr.AlbumId;
+
+/*Show the total sales made by each sales agent.*/
+SELECT ROUND(SUM(inv.total)) AS Total_Sales, emp.FirstName , emp.LastName FROM chinook.employees emp 
+LEFT JOIN chinook.customers cust ON emp.EmployeeId = cust.SupportRepId
+LEFT JOIN chinook.invoices inv ON cust.CustomerId = inv.CustomerId
+WHERE emp.Title = 'Sales Support Agent'
+GROUP BY emp.FirstName;
+
+/*What are the top 3 purchased tracks?*/
+SELECT tr.Name , SUM(inv.Quantity) AS Sum_Purchased FROM chinook.invoice_items inv , chinook.tracks tr 
+WHERE inv.TrackId = tr.TrackId
+GROUP BY tr.Name
+ORDER BY Sum_Purchased desc
+LIMIT 3;
+
+
+/*What countries do most orders come from? List top 5 countries.*/
+SELECT cust.Country , COUNT(cust.Country) AS Orders FROM chinook.customers cust
+GROUP BY cust.Country
+ORDER BY Orders desc
+LIMIT 5;
+
+/*List employee first names next to the names and emails of customers they sold to so that employees can send follow-up emails.*/
+SELECT emp.FirstName AS Employee , cust.FirstName , cust.LastName , cust.Email FROM chinook.employees emp , chinook.customers cust
+WHERE emp.EmployeeId = cust.SupportRepId
+
+/*Tag all track names and their album IDs that are 1,000 milliseconds above the average length as "long", 
+1,000 milliseconds below average as "short" and ones within the average range as "average".*/
+SELECT tr.name , tr.AlbumId , tr.milliseconds ,
+CASE
+WHEN tr.milliseconds >= AVG(tr.milliseconds) OVER () + 1000 THEN "long"
+WHEN tr.milliseconds <= AVG(tr.milliseconds) OVER () - 1000 THEN "short"
+ELSE "average"
+END AS "Duration"
+FROM chinook.tracks tr;
+
